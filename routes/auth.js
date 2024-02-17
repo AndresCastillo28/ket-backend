@@ -3,7 +3,7 @@ const { check, body } = require("express-validator");
 const { validateFields } = require("../middlewares/validateFields");
 const { signIn, signUp, renew } = require("../controllers/auth");
 const { validateJWT } = require("../middlewares/validateJWT");
-const Role = require("../models/Role"); // Assuming you have a Role model
+const Role = require("../models/Role");
 
 const router = express.Router();
 
@@ -21,7 +21,6 @@ router.post(
       .isEmpty()
       .withMessage("Role is required")
       .custom(async (value) => {
-        // Example of checking if the role exists in the database
         const role = await Role.findById(value);
         if (!role) {
           throw new Error("Invalid role ID.");

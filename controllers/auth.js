@@ -32,11 +32,10 @@ const signUp = async (req, res = response) => {
 };
 
 const signIn = async (req, res = response) => {
-
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate("role"); 
 
     if (!user) {
       return sendResponse(res, false, 400, "User does not exist.");
@@ -48,11 +47,12 @@ const signIn = async (req, res = response) => {
       return sendResponse(res, false, 400, "Incorrect password.");
     }
 
-    const token = await generateJWT(user._id, user.name);
+    const token = await generateJWT(user._id, user.name, user.role.name);
 
     sendResponse(res, true, 201, "Login successfully.", {
       id: user.id,
       name: user.name,
+      role: user.role.name,
       token,
     });
   } catch (error) {
@@ -61,16 +61,16 @@ const signIn = async (req, res = response) => {
   }
 };
 
-const renew = async(req, res = response) => {
-  const { uid, name } = req;
+const renew = async (req, res = response) => {
+  const { uid, name, role } = req;
 
-  const token = await generateJWT(uid, name);
+  const token = await generateJWT(uid, name, role);
 
-  sendResponse(res, true, 200, "Succesfully", { id: uid, name, token })
-}
+  sendResponse(res, true, 200, "Succesfully", { id: uid, name, role, token });
+};
 
 module.exports = {
   signIn,
   signUp,
-  renew
+  renew,
 };
