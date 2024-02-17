@@ -1,7 +1,9 @@
 const express = require("express");
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
 const { validateFields } = require("../middlewares/validateFields");
-const { signIn, signUp } = require("../controllers/auth");
+const { signIn, signUp, renew } = require("../controllers/auth");
+const { validateJWT } = require("../middlewares/validateJWT");
+const Role = require("../models/Role"); // Assuming you have a Role model
 
 const router = express.Router();
 
@@ -14,6 +16,17 @@ router.post(
       "password",
       "The password must have at least six characters"
     ).isLength({ min: 6 }),
+    body("role")
+      .not()
+      .isEmpty()
+      .withMessage("Role is required")
+      .custom(async (value) => {
+        // Example of checking if the role exists in the database
+        const role = await Role.findById(value);
+        if (!role) {
+          throw new Error("Invalid role ID.");
+        }
+      }),
     validateFields,
   ],
   signUp
@@ -28,5 +41,7 @@ router.post(
   ],
   signIn
 );
+
+router.get("/renew", validateJWT, renew);
 
 module.exports = router;

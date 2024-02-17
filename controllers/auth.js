@@ -5,7 +5,7 @@ const { sendResponse } = require("../utils/responseHandler");
 const { generateJWT } = require("../utils/jwt");
 
 const signUp = async (req, res = response) => {
-  const { email, password, name } = req.body;
+  const { email, password, name, role } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
@@ -17,7 +17,7 @@ const signUp = async (req, res = response) => {
     const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(password, salt);
 
-    const user = new User({ email, password: hashedPassword, name });
+    const user = new User({ email, password: hashedPassword, name, role });
     await user.save();
 
     sendResponse(res, true, 201, "User successfully registered.", {
@@ -48,7 +48,7 @@ const signIn = async (req, res = response) => {
       return sendResponse(res, false, 400, "Incorrect password.");
     }
 
-    const token = await generateJWT(user._id, user.nombres);
+    const token = await generateJWT(user._id, user.name);
 
     sendResponse(res, true, 201, "Login successfully.", {
       id: user.id,
@@ -61,7 +61,16 @@ const signIn = async (req, res = response) => {
   }
 };
 
+const renew = async(req, res = response) => {
+  const { uid, name } = req;
+
+  const token = await generateJWT(uid, name);
+
+  sendResponse(res, true, 200, "Succesfully", { id: uid, name, token })
+}
+
 module.exports = {
   signIn,
   signUp,
+  renew
 };

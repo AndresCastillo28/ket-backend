@@ -11,11 +11,13 @@ const sendResponse = (
       success: true,
       message,
       data,
+      error: null
     });
   } else {
     res.status(statusCode).json({
       success: false,
       message,
+      data: null,
       error,
     });
   }
