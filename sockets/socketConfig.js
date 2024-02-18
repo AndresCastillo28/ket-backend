@@ -2,6 +2,8 @@ const socketIo = require("socket.io");
 const ChatMessage = require("../models/ChatMessage");
 const jwt = require("jsonwebtoken");
 
+const connectedUsers = {}; 
+
 function initSocket(server) {
 
   const io = socketIo(server, {
@@ -28,10 +30,19 @@ function initSocket(server) {
   });
 
   io.on("connection", (socket) => {
-
+    console.log("User connected.")
     socket.on("disconnect", () => {
       console.log("User disconnected");
     });
+
+    const user = socket.decoded.name; 
+    connectedUsers[socket.id] = user; 
+    io.emit("users online", Object.values(connectedUsers));
+
+    socket.on('disconnect', () => {
+      delete connectedUsers[socket.id]; 
+      io.emit('users online', Object.values(connectedUsers));
+  });
 
     socket.on("ping_with_token", (token) => {
       try {
