@@ -11,6 +11,7 @@ Technical test for job position at Kuepa
 
 - Node.js: The runtime environment required to run the server. Given the dependencies, a recent LTS version of Node.js is recommended,  such as Node.js 14.x, 16.x, or higher, to ensure compatibility with all the listed packages.
 - npm (Node Package Manager): Used for managing the dependencies. npm is typically included with Node.js installation.
+- mongodb
 
 ## Installation
 
