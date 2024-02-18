@@ -34,9 +34,8 @@ function initSocket(server) {
     socket.on("disconnect", () => {
       console.log("User disconnected");
     });
-
-    const user = socket.decoded.name; 
-    connectedUsers[socket.id] = user; 
+    const { uid, name } = socket.decoded;
+    connectedUsers[socket.id] = { uid, name }; 
     io.emit("users online", Object.values(connectedUsers));
 
     socket.on('disconnect', () => {
