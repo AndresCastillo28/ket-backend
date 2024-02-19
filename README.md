@@ -14,11 +14,11 @@ Technical test for job position at Kuepa
 
 ## Installation
 
-1. npm i command to install dependencies
+1. First, clone this repository to your local machine using: https://github.com/AndresCastillo28/ket-backend/
+2. npm i command to install dependencies
 
 ## Configuration
 
-- Start the project to create the role values
 - Create a .env file with the values: MONGO_URI and SECRET_JWT_SEED and set the database uri and your jwt secret
 
 ## Usage
