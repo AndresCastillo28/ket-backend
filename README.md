@@ -19,7 +19,7 @@ Technical test for job position at Kuepa
 ## Configuration
 
 - Start the project to create the role values
-- Create a .env file with the values: MONGO_URI and SECRET_JWT_SEED
+- Create a .env file with the values: MONGO_URI and SECRET_JWT_SEED and set the database uri and your jwt secret
 
 ## Usage
 
